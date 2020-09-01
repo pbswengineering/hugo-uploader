@@ -141,7 +141,7 @@ def upload_files(files: List[str]):
     with FTP(config["ftp_host"], config["ftp_user"], config["ftp_pass"]) as ftp:
         for i, file_name in enumerate(files):
             remote_file_name = os.path.join(config["ftp_dir"], file_name[prefix_len:])
-            logging.debug(f"({i+1}/{tot}){file_name} ---> {remote_file_name}")
+            logging.debug(f"({i+1}/{tot}) {file_name} ---> {remote_file_name}")
             remote_dir = os.path.dirname(remote_file_name)
             cd_tree(ftp, remote_dir)
             remote_base = os.path.basename(remote_file_name)
