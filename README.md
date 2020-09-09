@@ -1,5 +1,5 @@
 <a href="https://www.bernardi.cloud/">
-    <img src=".readme-files/hugo-uploader-logo-72.png" alt="Hugo Uploader logo" title="Lilium" align="right" height="72" />
+    <img src=".readme-files/hugo-uploader-logo-72.png" alt="Hugo Uploader logo" title="Hugo Uploader" align="right" height="72" />
 </a>
 
 # Hugo Uploader
@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/github/license/bernarpa/hugo-uploader.svg)](https://opensource.org/licenses/AGPL-3.0)
 [![GitHub issues](https://img.shields.io/github/issues/bernarpa/hugo-uploader.svg)](https://github.com/bernarpa/hugo-uploader/issues)
 
-## Table of content
+## Table of contents
 
 - [Why Hugo Uploader](#why-hugo-uploader)
 - [Usage](#usage)
