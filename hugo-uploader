@@ -17,6 +17,7 @@ from ftplib import FTP, error_perm
 import _hashlib
 import hashlib
 import logging
+from multiprocessing import Pool
 import os
 import shutil
 import subprocess
@@ -125,6 +126,7 @@ def get_ftp_config() -> configparser.SectionProxy:
             "ftp_user": input("FTP user name: "),
             "ftp_pass": input("FTP password: "),
             "ftp_dir": input("FTP base directory: "),
+            "ftp_concurrent_connections": input("FTP concurrent connections"),
         }
         with open(".hugo-uploader.cfg", "w") as f:
             config.write(f)
@@ -133,20 +135,38 @@ def get_ftp_config() -> configparser.SectionProxy:
     return config["FTP"]
 
 
-def upload_files(files: List[str]):
-    """Upload the specified files to the configured FTP."""
-    prefix_len = len("public/")
-    tot = len(files)
-    config = get_ftp_config()
+def upload_file(pool_args):
+    """Upload a chunk of the whole file list to the configured FTP."""
+    config, i_chunk, chunk, prefix_len = pool_args
+    tot = len(chunk)
     with FTP(config["ftp_host"], config["ftp_user"], config["ftp_pass"]) as ftp:
-        for i, file_name in enumerate(files):
+        for i, file_name in enumerate(chunk):
             remote_file_name = os.path.join(config["ftp_dir"], file_name[prefix_len:])
-            logging.debug(f"({i+1}/{tot}) {file_name} ---> {remote_file_name}")
+            logging.debug(
+                f"([conn #{i_chunk}] {i+1}/{tot}) {file_name} ---> {remote_file_name}"
+            )
             remote_dir = os.path.dirname(remote_file_name)
             cd_tree(ftp, remote_dir)
             remote_base = os.path.basename(remote_file_name)
             with open(file_name, "rb") as f:
                 ftp.storbinary(f"STOR {remote_base}", f)
+
+
+def upload_files(files: List[str]):
+    """Upload the specified files to the configured FTP."""
+    prefix_len = len("public/")
+    tot = len(files)
+    config = get_ftp_config()
+    n_chunks = min(int(config["ftp_concurrent_connections"]), tot)
+    if n_chunks > 1:
+        logging.info(f"Using {n_chunks} parallel FTP connections...")
+    chunk_length = int(tot / n_chunks)
+    file_chunks = [files[i : i + chunk_length] for i in range(0, tot, chunk_length)]
+    pool_args = []
+    for i, chunk in enumerate(file_chunks):
+        pool_args.append((config, i, chunk, prefix_len))
+    pool = Pool(n_chunks)
+    pool.map(upload_file, pool_args)
 
 
 def main():

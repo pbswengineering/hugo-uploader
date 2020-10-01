@@ -45,7 +45,7 @@ Firstly, Hugo Uploader will invoke the `hugo` command to build a minified versio
 
 Secondly, if Hugo Uploader was run for the first time, it will ask for FTP connection details. Such details will be stored in the `.hugo-uploader.cfg` file within the website root directory. Please note that this file will contain the cleartext FTP password as well, you might want to keep it away from privy eyes.
 
-Finally, Hugo Uploader will upload via FTP every new or changed `public` file. If Hugo Uploader was executed for the first time it will simply upload each file (one by one, to keep the tool simple I didn't implement parallel connections yet), otherwise it will upload only new or modified items.
+Finally, Hugo Uploader will upload via FTP every new or changed `public` file. If Hugo Uploader was executed for the first time it will simply upload each file, otherwise it will upload only new or modified items.
 
 In order to find out which files have been added or modified, Hugo Uploader stores a `.hash-list` file on the website root directory. This file contains a list of all files in the `public` directory and their cryptographic hashes from the last successful FTP upload.
 
