@@ -194,7 +194,7 @@ def main():
         upload_files(files_to_upload)
         save_hash_list(hash_list_file, hash_list)
     end_time = datetime.now()
-    logging.info(f"Finished at {start_time}")
+    logging.info(f"Finished at {end_time}")
     elapsed = end_time - start_time
     elapsed_hours, rem_seconds = divmod(elapsed.total_seconds(), 3600)
     elapsed_minutes, elapsed_seconds = divmod(rem_seconds, 60)
