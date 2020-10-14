@@ -142,6 +142,7 @@ def upload_file(pool_args):
     with FTP(config["ftp_host"], config["ftp_user"], config["ftp_pass"]) as ftp:
         for i, file_name in enumerate(chunk):
             remote_file_name = os.path.join(config["ftp_dir"], file_name[prefix_len:])
+            remote_file_name = remote_file_name.replace("\\", "/")
             logging.debug(
                 f"([conn #{i_chunk}] {i+1}/{tot}) {file_name} ---> {remote_file_name}"
             )
