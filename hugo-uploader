@@ -188,7 +188,7 @@ def main():
         files_to_upload = hash_list_diff(hash_list, old_hash_list)
     else:
         logging.info("Hash list not found, uploading all files")
-        files_to_upload = hash_list.keys()
+        files_to_upload = list(hash_list.keys())
     if not files_to_upload:
         logging.info("There are no changes to upload, nothing to do.")
     else:
