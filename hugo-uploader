@@ -179,7 +179,6 @@ def main():
     if not hugo():
         logging.error("Hugo error, aborting...")
         sys.exit(1)
-    input('Press ENTER to continue...')
     hash_list = compute_hash_list()
     hash_list_file = ".hash_list"
     if os.path.exists(hash_list_file):
