@@ -103,7 +103,8 @@ def hash_list_diff(
 def cd_tree(ftp: FTP, current_dir: str):
     """Move in the specified FTP directory, creating each directory
     level if it doesn't exist.
-    Taken from https://stackoverflow.com/questions/10644608/create-missing-directories-in-ftplib-storbinary."""
+    Taken from https://stackoverflow.com/questions/10644608/create-missing-directories-in-ftplib-storbinary.
+    """
     if current_dir != "":
         try:
             ftp.cwd(current_dir)
@@ -176,9 +177,13 @@ def main():
     logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(message)s")
     start_time = datetime.now()
     logging.info(f"Starting at {start_time}")
-    if not hugo():
-        logging.error("Hugo error, aborting...")
-        sys.exit(1)
+    if not os.path.exists("public"):
+        logging.info("'public' directory missing. Building with Hugo...")
+        if not hugo():
+            logging.error("Hugo error, aborting...")
+            sys.exit(1)
+        else:
+            logging.info("'public' directory found. Skipping Hugo build step.")
     hash_list = compute_hash_list()
     hash_list_file = ".hash_list"
     if os.path.exists(hash_list_file):
